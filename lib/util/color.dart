@@ -9,6 +9,6 @@ class AppColors {
   static const fallBlue = Color(0xFF1A73E8); // 하락 시그널
   static const signalYellow = Color(0xFFFFAB00);
   static const chartLineGray = Color(0xFFBDBDBD);
-  static const lightText = Color(0xFFE0E6ED); // soft white-gray text for dark background
+  static const lightColor = Color(0xFFE0E6ED); // soft white-gray text for dark background
 
 }

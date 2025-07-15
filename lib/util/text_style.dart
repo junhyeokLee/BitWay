@@ -128,114 +128,114 @@ class textStyle {
 
   static TextStyle text6B_accentColor() {
     return TextStyle(
-        fontSize: 6.sp, fontWeight: FontWeight.w900, color: AppColors.lightText);
+        fontSize: 6.sp, fontWeight: FontWeight.w900, color: AppColors.lightColor);
   }
   static TextStyle text7B_lightText() {
     return TextStyle(
-        fontSize: 7.sp, fontWeight: FontWeight.w900, color: AppColors.lightText);
+        fontSize: 7.sp, fontWeight: FontWeight.w900, color: AppColors.lightColor);
   }
   static TextStyle text8B_lightText() {
     return TextStyle(
-        fontSize: 8.sp, fontWeight: FontWeight.w900, color: AppColors.lightText);
+        fontSize: 8.sp, fontWeight: FontWeight.w900, color: AppColors.lightColor);
   }
   static TextStyle text10B_lightText() {
     return TextStyle(
-        fontSize: 10.sp, fontWeight: FontWeight.w900, color: AppColors.lightText);
+        fontSize: 10.sp, fontWeight: FontWeight.w900, color: AppColors.lightColor);
   }
   static TextStyle text12B_lightText() {
     return TextStyle(
-        fontSize: 12.sp, fontWeight: FontWeight.w900, color: AppColors.lightText);
+        fontSize: 12.sp, fontWeight: FontWeight.w900, color: AppColors.lightColor);
   }
   static TextStyle text14B_lightText() {
     return TextStyle(
-        fontSize: 14.sp, fontWeight: FontWeight.w900, color: AppColors.lightText);
+        fontSize: 14.sp, fontWeight: FontWeight.w900, color: AppColors.lightColor);
   }
   static TextStyle text16B_lightText() {
     return TextStyle(
-        fontSize: 16.sp, fontWeight: FontWeight.w900, color: AppColors.lightText);
+        fontSize: 16.sp, fontWeight: FontWeight.w900, color: AppColors.lightColor);
   }
   static TextStyle text18B_lightText() {
     return TextStyle(
-        fontSize: 18.sp, fontWeight: FontWeight.w900, color: AppColors.lightText);
+        fontSize: 18.sp, fontWeight: FontWeight.w900, color: AppColors.lightColor);
   }
   static TextStyle text30B_lightText() {
     return TextStyle(
-        fontSize: 30.sp, fontWeight: FontWeight.w900, color: AppColors.lightText);
+        fontSize: 30.sp, fontWeight: FontWeight.w900, color: AppColors.lightColor);
   }
 
   static TextStyle text6semiB_lightText() {
     return TextStyle(
-        fontSize: 6.sp, fontWeight: FontWeight.w600, color: AppColors.lightText);
+        fontSize: 6.sp, fontWeight: FontWeight.w600, color: AppColors.lightColor);
   }
   static TextStyle text7semiB_lightText() {
     return TextStyle(
-        fontSize: 7.sp, fontWeight: FontWeight.w600, color: AppColors.lightText);
+        fontSize: 7.sp, fontWeight: FontWeight.w600, color: AppColors.lightColor);
   }
   static TextStyle text8semiB_lightText() {
     return TextStyle(
-        fontSize: 8.sp, fontWeight: FontWeight.w600, color: AppColors.lightText);
+        fontSize: 8.sp, fontWeight: FontWeight.w600, color: AppColors.lightColor);
   }
   static TextStyle text10semiB_lightText() {
     return TextStyle(
-        fontSize: 10.sp, fontWeight: FontWeight.w600, color: AppColors.lightText);
+        fontSize: 10.sp, fontWeight: FontWeight.w600, color: AppColors.lightColor);
   }
   static TextStyle text12semiB_lightText() {
     return TextStyle(
-        fontSize: 12.sp, fontWeight: FontWeight.w600, color: AppColors.lightText);
+        fontSize: 12.sp, fontWeight: FontWeight.w600, color: AppColors.lightColor);
   }
   static TextStyle text14semiB_lightText() {
     return TextStyle(
-        fontSize: 14.sp, fontWeight: FontWeight.w600, color: AppColors.lightText);
+        fontSize: 14.sp, fontWeight: FontWeight.w600, color: AppColors.lightColor);
   }
   static TextStyle text16semiB_lightText() {
     return TextStyle(
-        fontSize: 16.sp, fontWeight: FontWeight.w600, color: AppColors.lightText);
+        fontSize: 16.sp, fontWeight: FontWeight.w600, color: AppColors.lightColor);
   }
   static TextStyle text18semiB_lightText() {
     return TextStyle(
-        fontSize: 18.sp, fontWeight: FontWeight.w600, color: AppColors.lightText);
+        fontSize: 18.sp, fontWeight: FontWeight.w600, color: AppColors.lightColor);
   }
   static TextStyle text30semiB_lightText() {
     return TextStyle(
-        fontSize: 30.sp, fontWeight: FontWeight.w600, color: AppColors.lightText);
+        fontSize: 30.sp, fontWeight: FontWeight.w600, color: AppColors.lightColor);
   }
 
   static TextStyle text6R_lightText() {
     return TextStyle(
-        fontSize: 6.sp, fontWeight: FontWeight.normal, color: AppColors.lightText);
+        fontSize: 6.sp, fontWeight: FontWeight.normal, color: AppColors.lightColor);
   }
   static TextStyle text7R_lightText() {
     return TextStyle(
-        fontSize: 7.sp, fontWeight: FontWeight.normal, color: AppColors.lightText);
+        fontSize: 7.sp, fontWeight: FontWeight.normal, color: AppColors.lightColor);
   }
   static TextStyle text8R_lightText() {
     return TextStyle(
-        fontSize: 8.sp, fontWeight: FontWeight.normal, color: AppColors.lightText);
+        fontSize: 8.sp, fontWeight: FontWeight.normal, color: AppColors.lightColor);
   }
 
   static TextStyle text10R_lightText() {
     return TextStyle(
-        fontSize: 10.sp, fontWeight: FontWeight.normal, color: AppColors.lightText);
+        fontSize: 10.sp, fontWeight: FontWeight.normal, color: AppColors.lightColor);
   }
   static TextStyle text12R_lightText() {
     return TextStyle(
-        fontSize: 12.sp, fontWeight: FontWeight.normal, color: AppColors.lightText);
+        fontSize: 12.sp, fontWeight: FontWeight.normal, color: AppColors.lightColor);
   }
   static TextStyle text14R_lightText() {
     return TextStyle(
-        fontSize: 14.sp, fontWeight: FontWeight.normal, color: AppColors.lightText);
+        fontSize: 14.sp, fontWeight: FontWeight.normal, color: AppColors.lightColor);
   }
   static TextStyle text16R_lightText() {
     return TextStyle(
-        fontSize: 16.sp, fontWeight: FontWeight.normal, color: AppColors.lightText);
+        fontSize: 16.sp, fontWeight: FontWeight.normal, color: AppColors.lightColor);
   }
   static TextStyle text18R_lightText() {
     return TextStyle(
-        fontSize: 18.sp, fontWeight: FontWeight.normal, color: AppColors.lightText);
+        fontSize: 18.sp, fontWeight: FontWeight.normal, color: AppColors.lightColor);
   }
   static TextStyle text30R_lightText() {
     return TextStyle(
-        fontSize: 30.sp, fontWeight: FontWeight.normal, color: AppColors.lightText);
+        fontSize: 30.sp, fontWeight: FontWeight.normal, color: AppColors.lightColor);
   }
 
   static TextStyle text6B_white() {

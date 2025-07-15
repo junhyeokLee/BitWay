@@ -37,6 +37,7 @@ dependencies:
   envied: ^0.5.4+1  # 환경 변수를 위한 envied
   logger: ^2.4.0  # 로그를 위한 logger
   device_info_plus: ^11.4.0
+  web_socket_channel: ^3.0.3
 
 dev_dependencies:
   flutter_test:
@@ -59,6 +60,8 @@ flutter_launcher_icons:
   ios: true
   image_path_ios: "assets/images/icon/bw_logo.png"
   image_path_android: "assets/images/icon/bw_logo.png"
+  adaptive_icon_background: "assets/images/icon/main_bg.png"
+  adaptive_icon_foreground: "assets/images/icon/bw_logo.png"
 #  remove_alpha_ios: true
 
 

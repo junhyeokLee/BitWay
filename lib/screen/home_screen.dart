@@ -230,12 +230,12 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildSortIcon(String column) {
     if (_sortColumn == column) {
       if (_sortDirection == true) {
-        return Icon(Icons.keyboard_arrow_up, size: 12,color: AppColors.lightText);
+        return Icon(Icons.keyboard_arrow_up, size: 12,color: AppColors.lightColor);
       } else if (_sortDirection == false) {
-        return Icon(Icons.keyboard_arrow_down, size: 12,color: AppColors.lightText);
+        return Icon(Icons.keyboard_arrow_down, size: 12,color: AppColors.lightColor);
       }
     }
-    return Icon(Icons.unfold_more, size: 12,color: AppColors.lightText); // default state
+    return Icon(Icons.unfold_more, size: 12,color: AppColors.lightColor); // default state
   }
 
   @override
@@ -261,7 +261,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Text(
       '업비트',
       style: TextStyle(
-        color: AppColors.lightText,
+        color: AppColors.lightColor,
         fontWeight: FontWeight.bold,
         fontSize: 18,
       ),
@@ -315,7 +315,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     flex: 7,
                     child: Align(
                       alignment: Alignment.centerLeft,
-                      child: Text('코인명', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.lightText)),
+                      child: Text('코인명', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.lightColor)),
                     ),
                   ),
                   Expanded(
@@ -327,7 +327,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text('현재가', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.lightText)),
+                            Text('현재가', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.lightColor)),
                             SizedBox(width: 4),
                             _buildSortIcon('price'),
                           ],
@@ -344,7 +344,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text('전일대비', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.lightText)),
+                            Text('전일대비', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.lightColor)),
                             SizedBox(width: 4),
                             _buildSortIcon('change'),
                           ],
@@ -361,7 +361,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text('거래대금', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.lightText)),
+                            Text('거래대금', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.lightColor)),
                             SizedBox(width: 4),
                             _buildSortIcon('volume'),
                           ],
@@ -420,7 +420,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               children: [
                                 Text(
                                   koreanName,
-                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppColors.lightText),
+                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppColors.lightColor),
                                 ),
                                 Text(
                                   symbol,
@@ -472,7 +472,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Text(
                             '${volumeFormatter.format(volume / 1000000)}',
                             textAlign: TextAlign.center,
-                            style: TextStyle(color: AppColors.lightText, fontSize: 12),
+                            style: TextStyle(color: AppColors.lightColor, fontSize: 12),
                           ),
                         ),
                       ],

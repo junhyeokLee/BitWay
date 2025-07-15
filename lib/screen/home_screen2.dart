@@ -8,6 +8,8 @@ import '../util/color.dart';
 import '../util/hangul_util.dart' as HangulUtils;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:web_socket_channel/status.dart' as ws_status;
 
 class HomeScreen2 extends StatefulWidget {
   const HomeScreen2({Key? key}) : super(key: key);
@@ -28,6 +30,9 @@ class _HomeScreenState extends State<HomeScreen2> {
   bool? _sortDirection; // true: ascending, false: descending, null: default
 
   Map<String, String> coinLogos = {};
+  bool logosLoaded = false;
+
+  WebSocketChannel? _priceChannel;
 
 
   // Number formatters
@@ -37,7 +42,56 @@ class _HomeScreenState extends State<HomeScreen2> {
   @override
   void initState() {
     super.initState();
-    fetchUpbitMarketData();
+    Future.wait([
+      fetchCoinLogosFromCoinGecko(),
+      fetchUpbitMarketData(),
+    ]).then((_) {
+      setState(() {
+        logosLoaded = true;
+      });
+      _connectWebSocket();
+    });
+  }
+
+  void _connectWebSocket() {
+    final channel = WebSocketChannel.connect(
+      // Uri.parse('wss://bitway-back.onrender.com/ws'), // ← 실제 Render WebSocket URL로 교체
+        Uri.parse('ws://192.168.35.217:8080/ws')
+    );
+    setState(() {
+      _priceChannel = channel;
+    });
+
+    channel.stream.listen((message) {
+      try {
+        debugPrint("💬 Received: $message");
+        final data = jsonDecode(message);
+        final type = data['type'];
+        final code = data['code'];
+        final price = data['trade_price'];
+        if (type == 'ticker' && code != null && price != null) {
+          final symbol = code.toString().split('-')[1]; // e.g., KRW-BTC -> BTC
+          setState(() {
+            for (var ticker in _allMarketList) {
+              if (ticker['market'] == 'KRW-$symbol') {
+                ticker['trade_price'] = price;
+              }
+            }
+            for (var ticker in _displayList) {
+              if (ticker['market'] == 'KRW-$symbol') {
+                ticker['trade_price'] = price;
+              }
+            }
+          });
+        }
+      } catch (e) {
+        debugPrint('WebSocket parse error: $e');
+      }
+    }, onError: (error) {
+      debugPrint('WebSocket error: $error');
+    }, onDone: () {
+      debugPrint('WebSocket closed');
+    });
   }
 
   Future<void> fetchUpbitMarketData() async {
@@ -72,18 +126,20 @@ class _HomeScreenState extends State<HomeScreen2> {
         isLoading = false;
       });
       _sortMarketList();
-      await fetchCoinLogosFromCoinGecko();
+      // Removed: await fetchCoinLogosFromCoinGecko();
     } catch (e) {
       debugPrint('Error fetching market data: $e');
     }
   }
 
   Future<void> fetchCoinLogosFromCoinGecko() async {
+    Map<String, String> logoMap = {};
     try {
-      final res = await http.get(Uri.parse('https://api.coingecko.com/api/v3/coins/markets?vs_currency=krw&order=market_cap_desc&per_page=250&page=1&sparkline=false'));
-      if (res.statusCode == 200) {
+      for (int page = 1; page <= 5; page++) {
+        final res = await http.get(Uri.parse('https://api.coingecko.com/api/v3/coins/markets?vs_currency=krw&order=market_cap_desc&per_page=250&page=$page&sparkline=false'));
+        if (res.statusCode != 200) continue;
+
         final List<dynamic> marketData = jsonDecode(res.body);
-        Map<String, String> logoMap = {};
         for (var coin in marketData) {
           final symbol = (coin['symbol'] ?? '').toString().toUpperCase();
           final image = (coin['image'] ?? '').toString();
@@ -91,11 +147,10 @@ class _HomeScreenState extends State<HomeScreen2> {
             logoMap[symbol] = image;
           }
         }
-
-        setState(() {
-          coinLogos = logoMap;
-        });
       }
+      setState(() {
+        coinLogos = logoMap;
+      });
     } catch (e) {
       debugPrint('Error fetching coin logos: $e');
     }
@@ -181,12 +236,12 @@ class _HomeScreenState extends State<HomeScreen2> {
   Widget _buildSortIcon(String column) {
     if (_sortColumn == column) {
       if (_sortDirection == true) {
-        return Icon(Icons.keyboard_arrow_up, size: 12,color: AppColors.lightText);
+        return Icon(Icons.keyboard_arrow_up, size: 12,color: AppColors.lightColor);
       } else if (_sortDirection == false) {
-        return Icon(Icons.keyboard_arrow_down, size: 12,color: AppColors.lightText);
+        return Icon(Icons.keyboard_arrow_down, size: 12,color: AppColors.lightColor);
       }
     }
-    return Icon(Icons.unfold_more, size: 12,color: AppColors.lightText); // default state
+    return Icon(Icons.unfold_more, size: 12,color: AppColors.lightColor); // default state
   }
 
   @override
@@ -201,25 +256,15 @@ class _HomeScreenState extends State<HomeScreen2> {
           centerTitle: true,
         ),
       ),
-      body: RefreshIndicator(
-        onRefresh: fetchUpbitMarketData,
-        child: _buildCoinList(),
-      ),
+      body: logosLoaded
+          ? RefreshIndicator(
+              onRefresh: fetchUpbitMarketData,
+              child: _buildCoinList(),
+            )
+          : const Center(child: CircularProgressIndicator()),
     );
   }
 
-  Widget _buildExchangeTabBar() {
-    return Text(
-      '업비트',
-      style: TextStyle(
-        color: AppColors.lightText,
-        fontWeight: FontWeight.bold,
-        fontSize: 18,
-      ),
-    );
-  }
-
-  // Removed _buildExchangeButton and selectedExchange logic as only 업비트 is shown.
 
   Widget _buildCoinList() {
     if (isLoading) {
@@ -239,7 +284,7 @@ class _HomeScreenState extends State<HomeScreen2> {
               child: Column(
                 children: [
                   TextField(
-                    style: const TextStyle(color: AppColors.lightText),
+                    style: const TextStyle(color: AppColors.lightColor),
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.search, color: Colors.grey),
                       hintText: '코인명/심볼 검색',
@@ -268,7 +313,7 @@ class _HomeScreenState extends State<HomeScreen2> {
                     flex: 6,
                     child: Align(
                       alignment: Alignment.centerLeft,
-                      child: Text('코인명', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.lightText)),
+                      child: Text('코인명', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.lightColor)),
                     ),
                   ),
                   Expanded(
@@ -280,7 +325,7 @@ class _HomeScreenState extends State<HomeScreen2> {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text('현재가', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.lightText)),
+                            Text('현재가', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.lightColor)),
                             SizedBox(width: 4),
                             _buildSortIcon('price'),
                           ],
@@ -297,7 +342,7 @@ class _HomeScreenState extends State<HomeScreen2> {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text('전일대비', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.lightText)),
+                            Text('전일대비', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.lightColor)),
                             SizedBox(width: 4),
                             _buildSortIcon('change'),
                           ],
@@ -306,15 +351,15 @@ class _HomeScreenState extends State<HomeScreen2> {
                     ),
                   ),
                   Expanded(
-                    flex: 3,
+                    flex: 4,
                     child: GestureDetector(
                       onTap: () => _onSortColumn('volume'),
                       child: Align(
-                        alignment: Alignment.centerRight,
+                        alignment: Alignment.center,
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text('거래대금', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.lightText)),
+                            Text('거래대금', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.lightColor)),
                             SizedBox(width: 4),
                             _buildSortIcon('volume'),
                           ],
@@ -348,7 +393,7 @@ class _HomeScreenState extends State<HomeScreen2> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
           child: Container(
             decoration: BoxDecoration(
               color: Colors.transparent,
@@ -365,26 +410,6 @@ class _HomeScreenState extends State<HomeScreen2> {
                       children: [
                         Row(
                           children: [
-                            // Container(
-                            //   width: 16,
-                            //   height: 10,
-                            //   margin: const EdgeInsets.only(right: 4),
-                            //   decoration: BoxDecoration(
-                            //     color: changeRate >= 0.05
-                            //         ? AppColors.riseRed.withOpacity(0.7)
-                            //         : changeRate <= -0.05
-                            //             ? AppColors.fallBlue.withOpacity(0.7)
-                            //             : Colors.grey.withOpacity(0.5),
-                            //     borderRadius: BorderRadius.circular(2),
-                            //   ),
-                            //   child: changeRate.abs() > 0.05
-                            //       ? Icon(
-                            //           changeRate > 0 ? Icons.trending_up : Icons.trending_down,
-                            //           size: 10,
-                            //           color: Colors.white,
-                            //         )
-                            //       : SizedBox.shrink(),
-                            // ),
                             Padding(
                               padding: const EdgeInsets.only(right: 6.0),
                               child: CircleAvatar(
@@ -394,16 +419,16 @@ class _HomeScreenState extends State<HomeScreen2> {
                                     ? ClipOval(
                                         child: CachedNetworkImage(
                                           imageUrl: coinLogos[symbol.toUpperCase()]!,
-                                          width: 20,
-                                          height: 20,
+                                          width: 20.w,
+                                          height: 20.h,
                                           fit: BoxFit.cover,
                                           placeholder: (context, url) => SizedBox.shrink(),
                                           errorWidget: (context, url, error) => Icon(Icons.error, size: 12),
                                         ),
                                       )
                                     : Container(
-                                        width: 20,
-                                        height: 20,
+                                        width: 20.w,
+                                        height: 20.h,
                                         alignment: Alignment.center,
                                         decoration: BoxDecoration(
                                           shape: BoxShape.circle,
@@ -416,37 +441,39 @@ class _HomeScreenState extends State<HomeScreen2> {
                                       ),
                               ),
                             ),
-                            LayoutBuilder(
-                              builder: (context, constraints) {
-                                String displayText = koreanName.toString();
-                                if (displayText.length > 8) {
-                                  displayText = displayText.substring(0, 8) + '\n' + displayText.substring(8);
-                                }
-                                return Text(
-                                  displayText,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  softWrap: true,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14.sp,
-                                    color: AppColors.lightText,
-                                  ),
-                                );
-                              },
+                            Text(
+                              symbol,
+                              style: const TextStyle(color: Colors.grey, fontSize: 12),
                             ),
                           ],
                         ),
-                        Text(
-                          symbol,
-                          style: const TextStyle(color: Colors.grey, fontSize: 12),
-                        ),
+                        Padding(padding: const EdgeInsets.only(top: 6),
+                          child:    LayoutBuilder(
+                            builder: (context, constraints) {
+                              String displayText = koreanName.toString();
+                              if (displayText.length > 9) {
+                                displayText = displayText.substring(0, 9) + '\n' + displayText.substring(9);
+                              }
+                              return Text(
+                                displayText,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                softWrap: true,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14.sp,
+                                  color: AppColors.lightColor,
+                                ),
+                              );
+                            },
+                          ),
+                        )
                       ],
                     ),
                   ),
                 ),
                 Expanded(
-                  flex: 4,
+                  flex: 3,
                   child: Text(
                     price < 1
                       ? price.toStringAsFixed(7).replaceFirst(RegExp(r'\.?0+$'), '')
@@ -475,7 +502,7 @@ class _HomeScreenState extends State<HomeScreen2> {
                   ),
                 ),
                 Expanded(
-                  flex: 3,
+                  flex: 4,
                   child: Text(
                     '${volumeFormatter.format(volume / 1000000)}',
                     textAlign: TextAlign.center,
@@ -506,6 +533,7 @@ class _HomeScreenState extends State<HomeScreen2> {
 
   @override
   void dispose() {
+    _priceChannel?.sink.close(ws_status.normalClosure);
     super.dispose();
   }
 
