@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:bitway/routing/scaffold_with_nested_navigation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../screen/home_screen2.dart';
+
+import '../presentation/screen/main/home_screen2.dart';
 
 enum AppRoute { information, news, market, alarm, setting }
 

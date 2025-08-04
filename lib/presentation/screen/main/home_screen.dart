@@ -3,14 +3,15 @@ import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../util/color.dart';
-import '../util/hangul_util.dart' as HangulUtils;
 
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/status.dart' as status;
 
+import '../../../util/color.dart';
+import '../../../util/hangul_util.dart' as HangulUtils;
+
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -58,13 +59,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
     _channel!.sink.add(jsonEncode(payload));
 
-    bool _pendingUpdate = false;
+    bool pendingUpdate = false;
     void triggerUpdate() {
-      if (!_pendingUpdate) {
-        _pendingUpdate = true;
+      if (!pendingUpdate) {
+        pendingUpdate = true;
         Future.delayed(const Duration(milliseconds: 150), () {
           if (mounted) _sortMarketList();
-          _pendingUpdate = false;
+          pendingUpdate = false;
         });
       }
     }
@@ -470,7 +471,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         Expanded(
                           flex: 3,
                           child: Text(
-                            '${volumeFormatter.format(volume / 1000000)}',
+                            volumeFormatter.format(volume / 1000000),
                             textAlign: TextAlign.center,
                             style: TextStyle(color: AppColors.lightColor, fontSize: 12),
                           ),

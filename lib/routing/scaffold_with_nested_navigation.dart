@@ -7,7 +7,7 @@ import 'package:bitway/routing/NavigationHistoryManager.dart';
 import 'package:bitway/util/color.dart';
 
 class ScaffoldWithNestedNavigation extends StatefulWidget {
-  const ScaffoldWithNestedNavigation({Key? key, required this.navigationShell,}) : super(key: key);
+  const ScaffoldWithNestedNavigation({super.key, required this.navigationShell,});
 
   final StatefulNavigationShell navigationShell;
 

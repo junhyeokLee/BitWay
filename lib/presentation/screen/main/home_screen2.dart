@@ -4,15 +4,16 @@ import 'package:bitway/util/text_style.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../util/color.dart';
-import '../util/hangul_util.dart' as HangulUtils;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/status.dart' as ws_status;
 
+import '../../../util/color.dart';
+import '../../../util/hangul_util.dart' as HangulUtils;
+
 class HomeScreen2 extends StatefulWidget {
-  const HomeScreen2({Key? key}) : super(key: key);
+  const HomeScreen2({super.key});
 
   @override
   State<HomeScreen2> createState() => _HomeScreenState();
@@ -452,7 +453,7 @@ class _HomeScreenState extends State<HomeScreen2> {
                             builder: (context, constraints) {
                               String displayText = koreanName.toString();
                               if (displayText.length > 9) {
-                                displayText = displayText.substring(0, 9) + '\n' + displayText.substring(9);
+                                displayText = '${displayText.substring(0, 9)}\n${displayText.substring(9)}';
                               }
                               return Text(
                                 displayText,
@@ -504,7 +505,7 @@ class _HomeScreenState extends State<HomeScreen2> {
                 Expanded(
                   flex: 4,
                   child: Text(
-                    '${volumeFormatter.format(volume / 1000000)}',
+                    volumeFormatter.format(volume / 1000000),
                     textAlign: TextAlign.center,
                     style: textStyle.text12R_lightText(),
                   ),
