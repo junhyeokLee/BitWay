@@ -1,12 +1,33 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../../../core/network/DioClient.dart';
 import '../../../data/coin/req/FavoriteCoinReq.dart';
 import '../../../data/coin/res/CoinItem.dart';
 import '../../../data/coin/res/FavoriteCoinRes.dart';
+import '../../../data/coin/res/PremiumItem.dart';
 
 class CoinRepository {
-  final Dio _dio = DioClient().dio;
+
+  final Dio _dio;
+  final FlutterSecureStorage storage = const FlutterSecureStorage();
+  CoinRepository(this._dio);
+
+  Future<List<PremiumItem>> fetchPremiumList({
+    required String domestic, // e.g. 'upbit'
+    required String overseas, // e.g. 'binance'
+    required PremiumSort sortBy,
+  }) async {
+    final res = await _dio.get(
+      '/api/premium',
+      queryParameters: {
+        'domestic': domestic,
+        'overseas': overseas,
+        'sortBy': sortBy.query,
+      },
+    );
+    final data = res.data as List<dynamic>;
+    return data.map((e) => PremiumItem.fromJson(Map<String, dynamic>.from(e))).toList();
+  }
 
   Future<List<CoinItem>> fetchCoinList() async {
     try {

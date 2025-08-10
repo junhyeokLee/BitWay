@@ -19,36 +19,36 @@ class LoginScreen extends HookConsumerWidget {
 
     Future<void> login() async {
       ref.read(loginLoadingProvider.notifier).state = true;
-      final repo = ref.read(authRepositoryProvider);
+      // final repo = ref.read(authRepositoryProvider);
 
-      final userJson = await repo.login(
-        emailController.text,
-        passwordController.text,
-      );
+      // final userJson = await repo.login(
+      //   emailController.text,
+      //   passwordController.text,
+      // );
 
       ref.read(loginLoadingProvider.notifier).state = false;
 
-      if (userJson != null) {
-        print('userJson runtimeType: ${userJson.runtimeType}');
-
-        if (userJson is Map<String, dynamic>) {
-          final prefs = await SharedPreferences.getInstance();
-          await prefs.setString('userInfo', jsonEncode(userJson));
-          await prefs.setBool('isLoggedIn', true);
-
-          ref.read(userProvider.notifier).setUserFromJson(Map<String, dynamic>.from(userJson as dynamic));
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomeScreen2()));
-        } else {
-          print('Unexpected userJson structure: $userJson');
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('로그인 실패: 잘못된 응답 구조')),
-          );
-        }
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('로그인 실패')),
-        );
-      }
+      // if (userJson != null) {
+      //   print('userJson runtimeType: ${userJson.runtimeType}');
+      //
+      //   if (userJson is Map<String, dynamic>) {
+      //     final prefs = await SharedPreferences.getInstance();
+      //     await prefs.setString('userInfo', jsonEncode(userJson));
+      //     await prefs.setBool('isLoggedIn', true);
+      //
+      //     ref.read(userProvider.notifier).setUserFromJson(Map<String, dynamic>.from(userJson as dynamic));
+      //     Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomeScreen2()));
+      //   } else {
+      //     print('Unexpected userJson structure: $userJson');
+      //     ScaffoldMessenger.of(context).showSnackBar(
+      //       SnackBar(content: Text('로그인 실패: 잘못된 응답 구조')),
+      //     );
+      //   }
+      // } else {
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //     SnackBar(content: Text('로그인 실패')),
+      //   );
+      // }
     }
 
     return Scaffold(

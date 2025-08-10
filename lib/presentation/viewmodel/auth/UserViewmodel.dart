@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../data/auth/res/User.dart';
+import '../../../data/auth/res/User.dart';
 
 class UserViewModel extends StateNotifier<User?> {
   UserViewModel() : super(null);

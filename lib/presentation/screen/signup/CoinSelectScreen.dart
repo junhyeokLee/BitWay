@@ -12,7 +12,7 @@ class CoinSelectScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selected = useState<Set<String>>({});
-    final coinFuture = useFuture(useMemoized(() => CoinRepository().fetchCoinList()));
+    // final coinFuture = useFuture(useMemoized(() => CoinRepository().fetchCoinList()));
 
     void toggle(String coin) {
       selected.value = {
@@ -38,7 +38,7 @@ class CoinSelectScreen extends HookConsumerWidget {
         symbols: selected.value.toList(),
         alertEnabled: true,
       );
-      await CoinRepository().saveFavoriteCoins(dto);
+      // await CoinRepository().saveFavoriteCoins(dto);
 
       // 3. 메인으로 이동
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomeScreen2()));
@@ -48,48 +48,48 @@ class CoinSelectScreen extends HookConsumerWidget {
       appBar: AppBar(title: Text("관심 코인 선택")),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: coinFuture.connectionState != ConnectionState.done
-            ? Center(child: CircularProgressIndicator())
-            : coinFuture.hasError
-                ? Center(child: Text("코인 불러오기 실패"))
-                : Column(
-                    children: [
-                      Text("최소 3개 이상 선택해주세요", style: TextStyle(fontSize: 16)),
-                      SizedBox(height: 16),
-                      Expanded(
-                        child: GridView.count(
-                          crossAxisCount: 3,
-                          crossAxisSpacing: 12,
-                          mainAxisSpacing: 12,
-                          children: coinFuture.data!.map((coin) {
-                            final isSelected = selected.value.contains(coin.symbol);
-                            return GestureDetector(
-                              onTap: () => toggle(coin.symbol),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: isSelected ? Colors.blue : Colors.grey[200],
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    coin.symbol,
-                                    style: TextStyle(
-                                      color: isSelected ? Colors.white : Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                      ElevatedButton(
-                        onPressed: selected.value.length >= 3 ? completeSignup : null,
-                        child: Text("가입 완료"),
-                      )
-                    ],
-                  ),
+        // child: coinFuture.connectionState != ConnectionState.done
+        //     ? Center(child: CircularProgressIndicator())
+            // : coinFuture.hasError
+            //     ? Center(child: Text("코인 불러오기 실패"))
+            //     : Column(
+            //         children: [
+            //           Text("최소 3개 이상 선택해주세요", style: TextStyle(fontSize: 16)),
+            //           SizedBox(height: 16),
+            //           Expanded(
+            //             child: GridView.count(
+            //               crossAxisCount: 3,
+            //               crossAxisSpacing: 12,
+            //               mainAxisSpacing: 12,
+            //               children: coinFuture.data!.map((coin) {
+            //                 final isSelected = selected.value.contains(coin.symbol);
+            //                 return GestureDetector(
+            //                   onTap: () => toggle(coin.symbol),
+            //                   child: Container(
+            //                     decoration: BoxDecoration(
+            //                       color: isSelected ? Colors.blue : Colors.grey[200],
+            //                       borderRadius: BorderRadius.circular(8),
+            //                     ),
+            //                     child: Center(
+            //                       child: Text(
+            //                         coin.symbol,
+            //                         style: TextStyle(
+            //                           color: isSelected ? Colors.white : Colors.black,
+            //                           fontWeight: FontWeight.bold,
+            //                         ),
+            //                       ),
+            //                     ),
+            //                   ),
+            //                 );
+            //               }).toList(),
+            //             ),
+            //           ),
+            //           ElevatedButton(
+            //             onPressed: selected.value.length >= 3 ? completeSignup : null,
+            //             child: Text("가입 완료"),
+            //           )
+            //         ],
+            //       ),
       ),
     );
   }

@@ -6,7 +6,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.7.2
+  sdk: ">=3.0.0 <4.0.0" # Flutter가 지원하는 범위 안에서, 3.8 써도 OK
 
 dependencies:
   flutter:
@@ -40,6 +40,9 @@ dependencies:
   web_socket_channel: ^3.0.3
   lottie: ^3.3.1
   smooth_page_indicator: ^1.2.1
+  pretty_dio_logger: ^1.4.0
+  flutter_secure_storage: ^9.2.2 # 보안 저장소를 위한 flutter_secure_storage
+  connectivity_plus: ^6.1.0 # 네트워크 연결 상태를 위한 connectivity_plus
 
   flutter_screenutil: any
   flutter_riverpod: any

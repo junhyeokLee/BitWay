@@ -11,6 +11,8 @@ import '../intro/IntroPageViewScreen.dart';
 import '../login/LoginScreen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../main/PremiumListScreen.dart';
+
 class SplashScreen extends ConsumerStatefulWidget {
   @override
   ConsumerState<SplashScreen> createState() => _SplashScreenState();
@@ -42,7 +44,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
       }
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomeScreen2()));
     } else {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => LoginScreen()));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => PremiumListScreen()));
     }
   }
 

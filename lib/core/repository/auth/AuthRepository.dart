@@ -1,8 +1,12 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as dio;
+import 'package:bitway/core/storage/StorageKeys.dart';
 
 class AuthRepository {
   final Dio _dio;
-
+  final FlutterSecureStorage storage = const FlutterSecureStorage();
   AuthRepository(this._dio);
 
   Future<void> sendEmailVerificationCode(String email) async {
@@ -69,4 +73,32 @@ class AuthRepository {
       return false;
     }
   }
+
+  Future<(bool, String?, Map<String, dynamic>?)> refreshToken(String email, String refreshToken, String deviceId) async {
+    try {
+      final response = await _dio.post('/api/auth/reissue', data: {
+        "email": email,
+        "refreshToken": refreshToken,
+        "deviceId": deviceId
+      });
+
+      if (response.statusCode == 200) {
+        final data = response.data['data'] as Map<String, dynamic>?;
+        final accessToken = data?['accessToken'] as String?;
+        final newRefreshToken = data?['refreshToken'] as String?;
+        if (accessToken != null && newRefreshToken != null) {
+          await storage.write(key: StorageKeys.accessToken, value: accessToken);
+          await storage.write(key: StorageKeys.refreshToken, value: newRefreshToken);
+        }
+        return (true, null, data);
+      } else {
+        final String? msg = response.data['msg']?.toString() ?? '토큰 갱신 실패';
+        return (false, msg, null);
+      }
+    } catch (e) {
+      debugPrint('토큰 갱신 에러: $e');
+      return (false, '서버 통신 중 오류 발생', null);
+    }
+  }
+
 }
